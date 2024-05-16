@@ -93,8 +93,8 @@
                                  <form method="post" action="{{ route('frequencias.update', $batida->todas[$i]->id) }}">
                                      @csrf
                                      @method('PUT')
-                                     <input type="text" name="hora" value="{{ $batida->todas[$i]->hora }}">
-                                     <button type="submit" class="btn btn-success">Salvar</button>
+                                     <input style="width: 47px;" type="text" name="hora" value="{{ $batida->todas[$i]->hora }}">
+                                     <button style="width: 63px;" id="saveButton" type="submit" class="btn btn-success">Salvar</button>
                                  </form>
                                  @endif
                              </td>
@@ -129,4 +129,5 @@
    <!-- end of row -->
 </div>
 <!-- ======= Main content end ======= -->
+
 @endsection
