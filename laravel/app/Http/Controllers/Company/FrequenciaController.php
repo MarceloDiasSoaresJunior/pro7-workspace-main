@@ -225,23 +225,20 @@ class FrequenciaController extends Controller
 
     public function update(Request $request, $id)
     {
-        $this->validate($request, [
-            'hora' => 'required', // Adicione outras validações conforme necessário
-        ]);
-
         $frequencia = Frequencia::find($id);
 
-        // Pegue a data do ponto atual
-        $dataPonto = $frequencia->ponto->format('Y-m-d');
+        // Get the input and ensure it's in the correct format
+        $hora = $request->input('hora');
+        if (!preg_match('/^([01][0-9]|2[0-3]):[0-5][0-9]$/', $hora)) {
+            return response()->json(['error' => 'Hora inválida. Deve estar no formato HH:MM.'], 400);
+        }
 
-        // Substitua a hora fornecida na mesma data
-        $novaHora = $request->get('hora');
-        $frequencia->ponto = Carbon::createFromFormat('Y-m-d H:i', "$dataPonto $novaHora");
+        // Combine current date with the time
+        $ponto = date('Y-m-d') . ' ' . $hora;
 
+        $frequencia->ponto = $ponto;
         $frequencia->save();
 
-        return redirect()->route('frequencias.index')
-            ->with('success','Frequência atualizada com sucesso');
+        return back()->with('success', 'Atualização realizada com sucesso!');
     }
-
 }
