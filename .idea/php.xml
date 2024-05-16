@@ -123,7 +123,6 @@
       <path value="$PROJECT_DIR$/laravel/vendor/fruitcake/php-cors" />
       <path value="$PROJECT_DIR$/laravel/vendor/lucascudo/laravel-pt-br-localization" />
       <path value="$PROJECT_DIR$/laravel/vendor/hamcrest/hamcrest-php" />
-      <path value="$PROJECT_DIR$/laravel/vendor/lcobucci/clock" />
       <path value="$PROJECT_DIR$/laravel/vendor/aws/aws-crt-php" />
       <path value="$PROJECT_DIR$/laravel/vendor/lcobucci/jwt" />
       <path value="$PROJECT_DIR$/laravel/vendor/aws/aws-sdk-php" />

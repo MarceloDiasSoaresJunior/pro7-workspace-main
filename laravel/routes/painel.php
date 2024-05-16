@@ -65,6 +65,7 @@ Route::get('/funcionarios/exportXLS', [FuncionariosController::class, 'exportXLS
 Route::get('/atividades', [AtividadesController::class, 'listar']);
 Route::get('/atividades/funcao/{id}', [AtividadesController::class, 'listar_por_funcao']);
 Route::get('/atividades/funcionario/{id}', [AtividadesController::class, 'listar_por_funcionario']);
+Route::get('/atividades/funcionario/todas/{id}', [AtividadesController::class, 'listar_por_funcionario_todas']);
 Route::post('/atividades/funcionario/{id}/{atividade_id}/atualizar', [AtividadesController::class, 'atualizar']);
 Route::post('/atividades/funcionario/{id}/{atividade_id}/criar', [AtividadesController::class, 'criar']);
 
