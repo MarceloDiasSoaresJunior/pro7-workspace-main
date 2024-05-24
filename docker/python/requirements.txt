@@ -7,3 +7,4 @@ python-dotenv
 Pillow
 flask-cors
 pytz
+face_recognition
