@@ -3,7 +3,6 @@ peewee
 Flask
 numpy
 Redis
-face_recognition
 python-dotenv
 Pillow
 flask-cors

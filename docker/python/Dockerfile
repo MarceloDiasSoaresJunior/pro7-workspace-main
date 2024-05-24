@@ -1,4 +1,4 @@
-FROM jjanzic/docker-python3-opencv
+FROM ageitgey/face_recognition
 WORKDIR "/app"
 
 ARG DEBIAN_FRONTEND=noninteractive
@@ -6,8 +6,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends apt-utils
 
 RUN apt-get update -y && \
     apt-get install -yq git supervisor zlib1g-dev python3-dev libpng-dev libjpeg-dev libfreetype6-dev libonig-dev
-
-RUN apt-get install -y build-essential cmake pkg-config libx11-dev libatlas-base-dev libgtk-3-dev
 
 COPY requirements.txt requirements.txt
 RUN pip install -r requirements.txt
