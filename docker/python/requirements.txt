@@ -1,10 +1,11 @@
-PyMySQL
+dlib==19.23.0
+PyMYSQL
 peewee
 Flask
 numpy
 Redis
+face_recognition
 python-dotenv
 Pillow
 flask-cors
 pytz
-face_recognition
