@@ -1,17 +1,17 @@
-# Start from a core stack version
-FROM python:3.9-slim-buster
+FROM python:3.9
 WORKDIR "/app"
 
-# Add system libraries
-RUN apt-get update \
- && apt-get install -y --no-install-recommends build-essential cmake \
- && apt-get clean \
- && rm -rf /var/lib/apt/lists/*
+ARG DEBIAN_FRONTEND=noninteractive
+RUN apt-get update && apt-get install -y --no-install-recommends apt-utils
 
-# Add Python libraries
+RUN apt-get update -y && \
+    apt-get install -yq git supervisor zlib1g-dev python3-dev libpng-dev libjpeg-dev libfreetype6-dev libonig-dev
+
+RUN apt-get install -y build-essential cmake libopenblas-dev liblapack-dev pkg-config libx11-dev libatlas-base-dev libgtk-3-dev libboost-python-dev
+
 COPY requirements.txt requirements.txt
-RUN pip install --no-cache-dir -r requirements.txt \
- && rm -rf ~/.cache/pip
+RUN python --version
+RUN pip install dlib
+RUN pip install -r requirements.txt
 
-# Run command
 CMD ["python", "api.py"]

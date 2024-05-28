@@ -1,5 +1,4 @@
-dlib==19.23.0
-PyMYSQL
+PyMySQL
 peewee
 Flask
 numpy
