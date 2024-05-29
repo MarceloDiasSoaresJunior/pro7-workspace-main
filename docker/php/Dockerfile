@@ -9,10 +9,8 @@ RUN ln -s /usr/local/lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm
 # Fix debconf warnings upon build
 ARG DEBIAN_FRONTEND=noninteractive
 
-# Adicionar servidores DNS e instalar pacotes necessários
-RUN echo "Acquire::http::Proxy::deb.debian.org::http { Proxy \"http://8.8.8.8:53\"; };" > /etc/apt/apt.conf.d/00proxy && \
-    apt-get update && \
-    apt-get install -y --no-install-recommends \
+# Atualizar pacotes & Instalar ferramentas necessárias
+RUN apt-get update && apt-get install -y --no-install-recommends \
     apt-utils \
     procps \
     git \
@@ -31,20 +29,20 @@ RUN echo "Acquire::http::Proxy::deb.debian.org::http { Proxy \"http://8.8.8.8:53
     mariadb-server \
     libmagickwand-dev
 
-RUN pecl install redis && docker-php-ext-enable redis
-RUN pecl install imagick && docker-php-ext-enable imagick
+RUN pecl install redis && pecl install imagick
 
 ENV PHP_MEMORY_LIMIT=1G
 
 # Install GD extension
-RUN docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp && \
-    docker-php-ext-install -j "$(nproc)" gd
-
+RUN docker-php-ext-enable redis
+RUN docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp
+RUN docker-php-ext-install -j "$(nproc)" gd
 RUN docker-php-ext-install mbstring exif pcntl bcmath zip
 RUN docker-php-ext-enable imagick
 
 # Install Swoole extension
-RUN pecl install swoole && docker-php-ext-enable swoole
+RUN pecl install swoole
+RUN docker-php-ext-enable swoole
 
 # MySQL Support
 RUN docker-php-ext-install mysqli pdo pdo_mysql
@@ -64,7 +62,7 @@ RUN crontab /etc/cron.d/crontab
 # Create the log file to be able to run tail
 RUN touch /var/log/cron.log
 
-# Add supervisor config
+# Added supervisor config
 COPY supervisord.conf /etc/supervisor/conf.d/supervisor.conf
 
 CMD ["/usr/bin/supervisord", "-n"]
