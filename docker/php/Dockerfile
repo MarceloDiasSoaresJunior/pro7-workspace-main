@@ -8,7 +8,11 @@ RUN ln -s /usr/local/lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm
 
 # Fix debconf warnings upon build
 ARG DEBIAN_FRONTEND=noninteractive
-RUN apt-get update && apt-get install -y --no-install-recommends apt-utils  procps
+
+# Adicionar servidores DNS e instalar pacotes necessários
+RUN echo "nameserver 8.8.8.8" > /etc/resolv.conf && \
+    echo "nameserver 8.8.4.4" >> /etc/resolv.conf && \
+    apt-get update && apt-get install -y --no-install-recommends apt-utils procps
 
 # Update packages & Install Git and Supervisor
 RUN apt-get update -y && \
