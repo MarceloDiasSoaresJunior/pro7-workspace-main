@@ -9,8 +9,10 @@ RUN ln -s /usr/local/lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm
 # Fix debconf warnings upon build
 ARG DEBIAN_FRONTEND=noninteractive
 
-# Update packages & Install necessary tools
-RUN apt-get update && apt-get install -y --no-install-recommends \
+# Adicionar servidores DNS e instalar pacotes necessários
+RUN echo "Acquire::http::Proxy::deb.debian.org::http { Proxy \"http://8.8.8.8:53\"; };" > /etc/apt/apt.conf.d/00proxy && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends \
     apt-utils \
     procps \
     git \
