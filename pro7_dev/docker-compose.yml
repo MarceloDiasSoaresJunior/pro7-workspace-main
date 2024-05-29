@@ -4,6 +4,7 @@ services:
     restart: unless-stopped
     image: nginx:alpine
     container_name: pro7_nginx
+    command: [ "/bin/sh", "-c", "chmod -R +w /etc/nginx/conf.d && nginx -g 'daemon off;'" ]
     working_dir: /app
     volumes:
       - ../laravel:/app
