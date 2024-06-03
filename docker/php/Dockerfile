@@ -65,4 +65,7 @@ RUN touch /var/log/cron.log
 # Added supervisor config
 COPY supervisord.conf /etc/supervisor/conf.d/supervisor.conf
 
-CMD ["/usr/bin/supervisord", "-n"]
+# Configurar PHP-FPM para escutar na porta 9000
+RUN sed -i 's/listen = .*/listen = 9000/' /usr/local/etc/php-fpm.d/zz-docker.conf
+
+CMD ["php-fpm"]
