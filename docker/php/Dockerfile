@@ -8,28 +8,14 @@ RUN ln -s /usr/local/lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm
 
 # Fix debconf warnings upon build
 ARG DEBIAN_FRONTEND=noninteractive
+RUN apt-get update && apt-get install -y --no-install-recommends apt-utils  procps
 
-# Atualizar pacotes & Instalar ferramentas necessárias
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    apt-utils \
-    procps \
-    git \
-    supervisor \
-    libzip-dev \
-    cron \
-    nano \
-    unzip \
-    zip \
-    zlib1g-dev \
-    libpng-dev \
-    libjpeg-dev \
-    libwebp-dev \
-    libfreetype6-dev \
-    libonig-dev \
-    mariadb-server \
-    libmagickwand-dev
+# Update packages & Install Git and Supervisor
+RUN apt-get update -y && \
+    apt-get install -yq git supervisor libzip-dev cron nano unzip zip zlib1g-dev libpng-dev libjpeg-dev libwebp-dev libfreetype6-dev libonig-dev mariadb-server libmagickwand-dev
 
-RUN pecl install redis && pecl install imagick
+RUN pecl install redis
+RUN pecl install imagick
 
 ENV PHP_MEMORY_LIMIT=1G
 
@@ -65,7 +51,4 @@ RUN touch /var/log/cron.log
 # Added supervisor config
 COPY supervisord.conf /etc/supervisor/conf.d/supervisor.conf
 
-# Configurar PHP-FPM para escutar na porta 9000
-RUN sed -i 's/listen = .*/listen = 9000/' /usr/local/etc/php-fpm.d/zz-docker.conf
-
-CMD ["php-fpm"]
+CMD ["/usr/bin/supervisord", "-n"]
