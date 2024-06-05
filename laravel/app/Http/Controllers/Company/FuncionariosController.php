@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers\Company;
 
-use App\Exports\EmployeesExport;
-use Maatwebsite\Excel\Facades\Excel;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\FuncionarioSaveRequest;
 use App\Http\Requests\FuncionarioUpdateRequest;
@@ -17,6 +15,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
+use Maatwebsite\Excel\Facades\Excel;
 
 class FuncionariosController extends Controller
 {
@@ -103,7 +102,7 @@ class FuncionariosController extends Controller
                 'role' => 3,
                 'avatar' => $req->foto
             ]);
-
+    
         } else {
             $user = User::create([
                 'email' => $req->email,
@@ -111,7 +110,7 @@ class FuncionariosController extends Controller
                 'password' => bcrypt($req->password),
                 'role' => 3
             ]);
-
+    
         }
 
 
@@ -263,8 +262,8 @@ class FuncionariosController extends Controller
             <th scope='row'>" . $row->jornada->total_semanal . "</th>
             <th scope='row'>" . $qtdAtividades . "</th>
             </tr>";
-         }
-
+         }                       
+       
 
         $html .= "</tbody>
                     </table>
@@ -276,9 +275,29 @@ class FuncionariosController extends Controller
 
     }
 
-    public function exportXLS(Request $request)
-    {
-        return Excel::download(new EmployeesExport($request->user()->company->id), 'Relação de Funcionários.xlsx');
+    public function exportXLS(Request $req) {
+
+        $customer_data = Funcionario::where('company_id', $req->user()->company->id)->get();
+        $customer_array[] = array('ID', 'Nome', 'Celular', 'Email', 'Funcao', 'Jornada', 'Atividades');
+        foreach($customer_data as $row)
+        {
+         $customer_array[] = array(
+          'ID'  => $row->id,
+          'Nome'   => $row->user->name,
+          'Celular' => $row->celular,
+          'Email'  => $row->user->email,
+          'Funcao'   => $row->funcao->title,
+          'Jornada'  => $row->jornada->total_semanal,
+          'Atividades' => $row->atividades_count()
+         );
+        }
+        Excel::download('Relacao de funcionarios', function($excel) use ($customer_array){
+         $excel->setTitle('Relacao de funcionarios');
+         $excel->sheet('Relacao de funcionarios', function($sheet) use ($customer_array){
+          $sheet->fromArray($customer_array, null, 'A1', false, false);
+         });
+        })->download('xlsx');
+
     }
 
 

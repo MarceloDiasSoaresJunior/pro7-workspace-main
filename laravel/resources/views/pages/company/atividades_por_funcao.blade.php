@@ -69,15 +69,9 @@
                                                         </td>
                                                         <td>{{ $funcionario->atividades }}</td>
                                                         <td>
-                                                            <div class="dropdown">
-                                                                <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                                                                    Ver
-                                                                </button>
-                                                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                                    <li><a class="dropdown-item" href="/atividades/funcionario/{{ $funcionario->id }}">Ver atividades do dia</a></li>
-                                                                    <li><a class="dropdown-item" href="/atividades/funcionario/todas/{{ $funcionario->id }}">Ver todas</a></li>
-                                                                </ul>
-                                                            </div>
+                                                            <a class="text-primary me-2" style="font-size: 23px;" href="/atividades/funcionario/{{ $funcionario->id }}">
+                                                                <i class="nav-icon i-Eye fw-bold"></i>
+                                                            </a>
                                                         </td>
                                                     </tr>
                                                     @endif

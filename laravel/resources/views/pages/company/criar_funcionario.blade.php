@@ -57,7 +57,7 @@
                                                 <label for="email-funcionario-add">E-mail</label>
                                                 <div class="input-group mb-3">
                                                     <span class="input-group-text" id="email-funcionario-add">E-mail</span>
-                                                    <input class="form-control" name="email" value="" required type="email" placeholder="nome@email.com.br" aria-describedby="email-funcionario-add""/>
+                                                    <input class="form-control" name="email" value="" required type="text" placeholder="nome@email.com.br" aria-describedby="email-funcionario-add" />
                                                 </div>
                                             </div>
                                             <div class="col-md-4 form-group mb-3">
@@ -124,28 +124,28 @@ $(function() {
     }
 
     const cep = document.querySelector("input[name=cep]");
-
+  
   cep.addEventListener('blur', e=> {
   		const value = cep.value.replace(/[^0-9]+/, '');
       const url = `https://viacep.com.br/ws/${value}/json/`;
-
+      
       fetch(url)
       .then( response => response.json())
       .then( json => {
-
+      		
           if( json.logradouro ) {
           	document.querySelector('input[name=endereco]').value = json.logradouro;
             document.querySelector('input[name=bairro]').value = json.bairro;
             document.querySelector('input[name=cidade]').value = json.localidade;
             document.querySelector('input[name=estado]').value = json.uf;
           }
-
+      
       });
-
-
+      
+      
   });
 
-
+    
 });
 
 </script>

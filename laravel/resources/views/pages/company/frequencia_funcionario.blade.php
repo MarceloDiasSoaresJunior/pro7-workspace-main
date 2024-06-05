@@ -80,44 +80,36 @@
                               <th scope="col">Anexo</th>
                            </tr>
                         </thead>
-                         <tbody style="text-align: center;">
-                         @foreach($frequencias as $batida)
-                         <tr>
-                             <th scope="row">{{ date("d", strtotime($batida[0]['ponto'])) }}</th>
-                             <td>{{ mb_convert_case($batida[0]['pontoMes'], MB_CASE_TITLE, 'UTF-8') }}</td>
-                             <td>{{ $batida[0]['anoNumber'] }}</td>
-                             <td>{{ $batida[0]['diaString'] }}</td>
-                             @for($i = 0; $i < 4; $i++)
-                             <td>
-                                 @if(isset($batida->todas[$i]))
-                                 <form method="post" action="{{ route('frequencias.update', $batida->todas[$i]->id) }}">
-                                     @csrf
-                                     @method('PUT')
-                                     <input style="width: 47px;" type="text" name="hora" value="{{ $batida->todas[$i]->hora }}">
-                                     <button style="width: 63px;" id="saveButton" type="submit" class="btn btn-success">Salvar</button>
-                                 </form>
-                                 @endif
-                             </td>
-                             @endfor
-                             <td>
-                                 @if($batida[0]->ferias)
-                                 <span class="badge bg-warning">Férias</span>
-                                 @elseif($batida->todas->count() < 4)
-                                 <span class="badge bg-danger">Não compareceu</span>
-                                 @elseif(isset($batida->todas[0]->hora) && isset($batida->todas[1]->hora) && isset($batida->todas[2]->hora) && isset($batida->todas[3]->hora))
-                                 <span class="badge bg-success">Compareceu</span>
-                                 @endif
-                             </td>
-                             <td>
-                                 @if($batida[0]->document)
-                                 <a class="text-success me-2" style="font-size: 23px;line-height: 20px;" href="{{ $batida[0]->document }}">
-                                     <i style="margin:0px 0px -4px;" class="nav-icon i-File fw-bold"></i>
-                                     @else
-                                     -
-                                     @endif
-                             </td>
-                         </tr>
-                         @endforeach
+                        <tbody style="text-align: center;">
+                        @foreach($frequencias as $batida)
+                                    <tr>
+                                        <th scope="row">{{ date("d", strtotime($batida[0]['ponto'])) }}</th>
+                                        <td>{{ mb_convert_case($batida[0]['pontoMes'], MB_CASE_TITLE, 'UTF-8') }}</td>
+                                        <td>{{ $batida[0]['anoNumber'] }}</td>
+                                        <td>{{ $batida[0]['diaString'] }}</td>
+                                        <td>@if(isset($batida->todas[0])) {{ $batida->todas[0]->hora }} @endif</td>
+                                        <td>@if(isset($batida->todas[1])) {{ $batida->todas[1]->hora }} @endif</td>
+                                        <td>@if(isset($batida->todas[2])) {{ $batida->todas[2]->hora }} @endif</td>
+                                        <td>@if(isset($batida->todas[3])) {{ $batida->todas[3]->hora }} @endif</td>
+                                        <td>
+                                            @if($batida[0]->ferias)
+                                            <span class="badge bg-warning">Férias</span>
+                                            @elseif($batida->todas->count() < 4)
+                                            <span class="badge bg-danger">Não compareceu</span>
+                                            @elseif(isset($batida->todas[0]->hora) && isset($batida->todas[1]->hora) && isset($batida->todas[2]->hora) && isset($batida->todas[3]))
+                                            <span class="badge bg-success">Compareceu</span>
+                                            @endif
+                                        </td>
+                                        <td>
+                                            @if($batida[0]->document)
+                                            <a class="text-success me-2" style="font-size: 23px;line-height: 20px;" href="{{ $batida[0]->document }}">
+                                                <i style="margin:0px 0px -4px;" class="nav-icon i-File fw-bold"></i>
+                                                @else
+                                                -
+                                                @endif
+                                        </td>
+                                    </tr>
+                        @endforeach
                          </tbody>
                      </table>
                   </div>
@@ -129,5 +121,4 @@
    <!-- end of row -->
 </div>
 <!-- ======= Main content end ======= -->
-
 @endsection

@@ -55,8 +55,6 @@ services:
       MYSQL_PASSWORD: 'password'
       MYSQL_ROOT_PASSWORD: 'password'
       MYSQL_TCP_PORT: 3663
-    ports:
-      - 3663:3663
     networks:
       - app-network
       

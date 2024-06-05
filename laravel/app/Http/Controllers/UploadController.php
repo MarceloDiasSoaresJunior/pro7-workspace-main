@@ -50,6 +50,7 @@ class UploadController extends Controller
             'file' => $path,
             'media_type' => 'picture'
         ]);
+
         return $upload;
     }
 }
