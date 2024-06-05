@@ -11,7 +11,7 @@ services:
       - ../docker/nginx/conf.d:/etc/nginx/conf.d:ro
     ports:
       - "80:80"
-    links:
+    depends_on:
       - database
       - php
       # - python
@@ -63,10 +63,10 @@ services:
     restart: unless-stopped
     container_name: pro7_mysql
     environment:
-      MYSQL_DATABASE: ${DB_NAME}
-      MYSQL_USER: ${DB_USER}
-      MYSQL_PASSWORD: ${DB_PASSWORD}
-      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: pro7_prod
+      MYSQL_USER: pam8765
+      MYSQL_PASSWORD: "@pQ6tN73z10C"
+      MYSQL_ROOT_PASSWORD: "@pQ6tN73z10C"
     volumes:
       - '../docker/mysql/data:/var/lib/mysql'
     networks:

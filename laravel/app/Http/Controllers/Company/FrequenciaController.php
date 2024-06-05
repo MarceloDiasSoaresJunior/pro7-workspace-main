@@ -116,7 +116,7 @@ class FrequenciaController extends Controller
 
         $interval = new DateInterval('P1D');
         $periodo = new DatePeriod($inicio, $interval ,$fim);
- 
+
         $html = "";
 
         $html .= "<h2>". $company_name . "</h2>";
@@ -146,7 +146,7 @@ class FrequenciaController extends Controller
         ->whereDate('ponto', $data->format("Y-m-d"))
         ->with('frequencias')
         ->first();
-        
+
         if($frequencias) {
                 $data_ponto_format = strtotime($frequencias->ponto);
 
@@ -161,7 +161,7 @@ class FrequenciaController extends Controller
                 $ponto3 = isset($batidas[3]) ? $batidas[3]->hora : "Não computado";
 
                 $compareceu = "Faltou";
- 
+
                 if ($ponto0 !== "Não computado" || $ponto1 !== "Não computado" || $ponto2 !== "Não computado" || $ponto3 !== "Não computado") {
                   $compareceu = "Incompleto";
                 }
@@ -183,7 +183,7 @@ class FrequenciaController extends Controller
                     <th scope='row'>" . $ponto3 . "</th>
                     <th scope='row'>" . $compareceu . "</th>
                     </tr>";
-                } 
+                }
         } else {
             $html .= "
             <tr>
@@ -199,11 +199,11 @@ class FrequenciaController extends Controller
             </tr>";
         }
 
-    
+
 
        }
 
-  
+
 
         $pdf = App::make('dompdf.wrapper');
 
@@ -217,4 +217,28 @@ class FrequenciaController extends Controller
         return $pdf->stream();
     }
 
+    public function edit($id)
+    {
+        $frequencia = Frequencia::find($id);
+        return view('editFrequencia')->with('frequencia', $frequencia);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $frequencia = Frequencia::find($id);
+
+        // Get the input and ensure it's in the correct format
+        $hora = $request->input('hora');
+        if (!preg_match('/^([01][0-9]|2[0-3]):[0-5][0-9]$/', $hora)) {
+            return response()->json(['error' => 'Hora inválida. Deve estar no formato HH:MM.'], 400);
+        }
+
+        // Combine current date with the time
+        $ponto = date('Y-m-d') . ' ' . $hora;
+
+        $frequencia->ponto = $ponto;
+        $frequencia->save();
+
+        return back()->with('success', 'Atualização realizada com sucesso!');
+    }
 }

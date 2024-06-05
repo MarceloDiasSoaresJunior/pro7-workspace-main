@@ -21,7 +21,7 @@ Route::get('/qrcode', [CompanyDashboardController::class, 'qrcode']);
 Route::get('/perfil', [CompanyDashboardController::class, 'perfil']);
 Route::post('/perfil', [CompanyDashboardController::class, 'perfil_atualizar']);
 
-//Politica de Privacidade 
+//Politica de Privacidade
 Route::get('/politicaprivacidade', [CompanyDashboardController::class, 'politicaprivacidade']);
 //Termos de uso
 Route::get('/termosdeuso', [CompanyDashboardController::class, 'termosdeuso']);
@@ -65,6 +65,7 @@ Route::get('/funcionarios/exportXLS', [FuncionariosController::class, 'exportXLS
 Route::get('/atividades', [AtividadesController::class, 'listar']);
 Route::get('/atividades/funcao/{id}', [AtividadesController::class, 'listar_por_funcao']);
 Route::get('/atividades/funcionario/{id}', [AtividadesController::class, 'listar_por_funcionario']);
+Route::get('/atividades/funcionario/todas/{id}', [AtividadesController::class, 'listar_por_funcionario_todas']);
 Route::post('/atividades/funcionario/{id}/{atividade_id}/atualizar', [AtividadesController::class, 'atualizar']);
 Route::post('/atividades/funcionario/{id}/{atividade_id}/criar', [AtividadesController::class, 'criar']);
 
@@ -85,7 +86,8 @@ Route::post('/observacoes/{id}/{id2}', [ObservacoesController::class, 'send_mess
 Route::get('/frequencia', [FrequenciaController::class, 'listar']);
 Route::get('/frequencia/{id}', [FrequenciaController::class, 'funcionario']);
 Route::get('/frequencia/{id}/export-pdf/{ano}/{mes}', [FrequenciaController::class, 'exportPdf']);
-
+Route::get('/frequencia/{id}/edit', [FrequenciaController::class, 'edit'])->name('frequencias.edit');
+Route::put('/frequencia/{id}', [FrequenciaController::class, 'update'])->name('frequencias.update');
 
 Route::get('/politicaprivacidade', function () {
     return view('pages.company.politicaprivacidade');

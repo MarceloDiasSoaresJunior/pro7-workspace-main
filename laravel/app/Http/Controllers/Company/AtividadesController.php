@@ -56,7 +56,7 @@ class AtividadesController extends Controller
             $total_funcionarios = 0;
 
             foreach ($atividades as $at) {
-    
+
                 $hasAtividade = FuncionarioAtividade::where('company_id', $company_id)
                     ->where('atividade_id', $at[0]->id)
                     ->where('dia', $commonDates['dateForMySQL'])
@@ -123,7 +123,7 @@ class AtividadesController extends Controller
             $funcionario->atividades = $atividadesCadastradas;
 
             $funcionario->porcentagem_completas = round($this->getPercentage($atividadesCompletas, $atividadesCadastradas));
-        }        
+        }
 
         $data = [
             'funcionarios' => $funcionarios,
@@ -153,6 +153,49 @@ class AtividadesController extends Controller
         return $percentage;
     }
 
+    public function listar_por_funcionario_todas(Request $req, $funcionario_id)
+    {
+        $funcionario_id = (int)$funcionario_id;
+        $commonDates = CommomDataService::getCommonDates($req);
+        $company_id = $req->user()->company->id;
+
+        $user_id = Funcionario::where('id', $funcionario_id)->value('user_id');
+        $funcionario_name = User::where('id', $user_id)->value('name');
+
+        $funcao_id = Funcionario::where('id', $funcionario_id)->value('funcao_id');
+        $funcao_title = Funcao::where('id', $funcao_id)->value('title');
+
+        $atividades = Atividade::where('company_id', $company_id)
+            ->whereHas('atividade_funcionario', function ($queryF) use ($funcionario_id) {
+                $queryF->where('funcionario_id', $funcionario_id);
+                $queryF->where('status', 1);
+            })
+            ->get();
+
+        foreach ($atividades as $atividade) {
+            $atividadesCompleta = FuncionarioAtividade::where('company_id', $company_id)
+                ->where('atividade_id', $atividade->id)
+                ->where('dia', $commonDates['dateForMySQL'])
+                ->where('funcionario_id',  $funcionario_id)
+                ->first();
+
+            $atividade->nao_iniciada = !$atividadesCompleta;
+            $atividade->iniciada = $atividadesCompleta && $atividadesCompleta->status === 0;
+            $atividade->completa = $atividadesCompleta && $atividadesCompleta->status === 1;
+
+            $atividade->observacoes = Observacao::where('funcionario_id', $funcionario_id)->where('atividade_funcionario_id', $atividade->id)->where('company_id', $company_id)->get()->count();
+        }
+
+        $data = [
+            'atividades' => $atividades,
+            'funcionario_id' => $funcionario_id,
+            'funcionario_name' => $funcionario_name,
+            'funcao_title' => $funcao_title,
+            ...$commonDates,
+            'historico_action' => '/atividades/funcionario/' . $funcionario_id
+        ];
+        return view('pages.company.atividades_por_funcionario', $data);
+    }
     public function listar_por_funcionario(Request $req, $funcionario_id)
     {
 
@@ -188,7 +231,7 @@ class AtividadesController extends Controller
             $atividade->nao_iniciada = !$atividadesCompleta;
             $atividade->iniciada = $atividadesCompleta && $atividadesCompleta->status === 0;
             $atividade->completa = $atividadesCompleta && $atividadesCompleta->status === 1;
-           
+
             $atividade->observacoes = Observacao::where('funcionario_id', $funcionario_id)->where('atividade_funcionario_id', $atividade->id)->where('company_id', $company_id)->get()->count();
         }
 
