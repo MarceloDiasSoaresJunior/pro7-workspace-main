@@ -1,26 +1,26 @@
 version: "3.1"
 services:
   nginx:
-    restart: unless-stopped
-    image: nginx:alpine
-    container_name: pro7_nginx
-    working_dir: /app
-    volumes:
-      - ../laravel:/app
-      - ../docker/nginx/conf/nginx.conf:/etc/nginx/conf/nginx.conf:ro
-      - ../docker/nginx/conf.d:/etc/nginx/conf.d:ro
-    ports:
-      - "80:80"
-    depends_on:
-      - database
-      - php
-      # - python
-    networks:
-      - app-network
+  restart: unless-stopped
+  build: ../docker/nginx/
+  container_name: pro7_nginx
+  working_dir: /app
+  volumes:
+    - ../laravel:/app
+    - ../docker/nginx/conf/nginx.conf:/etc/nginx/conf/nginx.conf:ro
+    - ../docker/nginx/conf.d:/etc/nginx/conf.d:ro
+  ports:
+    - "80:80"
+  depends_on:
+    - database
+    - php
+    # - python
+  networks:
+    - app-network
     # depends_on:
-      # - php
-      # - python
-      # - database
+    # - php
+    # - python
+    # - database
 
   php:
     restart: unless-stopped
